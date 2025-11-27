@@ -1,9 +1,18 @@
-import { useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useContext, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { AppContext } from '../../context/AppContext'
 
 const Loading = () => {
+  
+  const { navigate } = useContext(AppContext)
+  
+  const isCourseDetailsPage = location.pathname.includes('/course/')
+  const isPlayerPage = location.pathname.includes('/player/')
+  const isDashboardPage = location.pathname.includes('/educator')
+  const isMyCoursesPage = location.pathname.includes('/educator/my-courses')
+  const isStudentsEnrolledPage = location.pathname.includes('/educator/students-enrolled')
+  
   const { path } = useParams()
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (path) {
@@ -16,7 +25,11 @@ const Loading = () => {
   }, [])
   
   return (
-    <div className='min-h-screen flex items-center justify-center'>
+    <div className={`flex items-center justify-center
+      ${( isCourseDetailsPage || isPlayerPage || isDashboardPage || isMyCoursesPage || isStudentsEnrolledPage ) 
+                        ? 'min-h-screen' 
+                        : ''
+      }`}>
         <div className='w-16 sm:w-20 aspect-square border-4 border-zinc-300 
                        border-t-4 border-t-green-400 rounded-full animate-spin'></div>
     </div>

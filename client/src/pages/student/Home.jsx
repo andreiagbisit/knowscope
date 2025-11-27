@@ -1,4 +1,3 @@
-import CallToAction from '../../components/student/CallToAction'
 import Companies from '../../components/student/Companies'
 import CoursesSection from '../../components/student/CoursesSection'
 import Footer from '../../components/student/Footer'
@@ -12,7 +11,6 @@ const Home = () => {
         <Companies />
         <CoursesSection />
         <TestimonialsSection />
-        <CallToAction />
         <Footer />
     </div>
   )

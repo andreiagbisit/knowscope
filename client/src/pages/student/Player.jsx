@@ -116,113 +116,123 @@ const Player = () => {
   },[])
 
   return courseData ?  (
-    <>
-      <div className='p-4 sm:p-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-10 md:px-36'>
-          {/* LEFT COLUMN */}
-          <div className='text-zinc-800'>
-            <h2 className='text-xl font-semibold'>Course Structure</h2>
+    <div className='min-h-screen flex flex-col'>
+      <div className='flex-1'>
+        <div className='p-4 sm:p-10 flex flex-col-reverse lg:grid md:grid-cols-2 gap-10 md:px-36'>
+            {/* LEFT COLUMN */}
+            <div className='text-zinc-800'>
+              {courseData && (
+                <h1 className='text-2xl font-bold mb-1'>
+                  {courseData.courseTitle}
+                </h1>
+              )}
+              
+              <h2 className='text-xl'>Course Structure</h2>
 
-            <div className='pt-5'>
-              { courseData && courseData.courseContent.map((chapter, index) => (
-                <div key={index} className='border border-zinc-300 bg-white mb-2 rounded'>
-                  
-                  <div className='flex items-center justify-between px-4 py-3 cursor-pointer select-none' 
-                        onClick={() => toggleSection(index)}>
+              <div className='pt-5'>
+                { courseData && courseData.courseContent.map((chapter, index) => (
+                  <div key={index} className='border border-zinc-300 bg-white mb-2 rounded-lg'>
+                    
+                    <div className='flex items-center justify-between px-4 py-3 cursor-pointer select-none' 
+                          onClick={() => toggleSection(index)}>
 
-                    <div className='flex items-center gap-2'>
-                      <img className={`transform transition-transform ${openSections [index] ? 'rotate-180' : ''}`} 
-                            src={assets.down_arrow_icon} alt='arrow icon' />
-                      
-                      <p className='font-medium md:text-base text-sm'>
-                        {chapter.chapterTitle}
+                      <div className='flex items-center gap-2'>
+                        <img className={`transform transition-transform ${openSections [index] ? 'rotate-180' : ''}`} 
+                              src={assets.down_arrow_icon} alt='arrow icon' />
+                        
+                        <p className='font-semibold md:text-base text-sm'>
+                          {chapter.chapterTitle}
+                        </p>
+
+                      </div>
+
+                      <p className='text-sm md:text-default'>
+                        {chapter.chapterContent.length}{" "}
+                        {chapter.chapterContent.length === 1 ? 'Lecture' : 'Lectures'}
+                        {' '}- {calculateChapterTime(chapter)}
                       </p>
-
                     </div>
 
-                    <p className='text-sm md:text-default'>
-                      {chapter.chapterContent.length} Lectures - {calculateChapterTime(chapter)}
-                    </p>
-                  </div>
-
-                  <div className={`overflow-hidden transition-all duration-300 ${openSections[index] ? 'max-h-96' : 'max-h-0'}`}>
-                    
-                    <ul className='list-disc md:pl-10 pl-4 pr-4 py-2 text-zinc-600 border-t border-zinc-300'>
-                      {chapter.chapterContent.map((lecture, i) => (
-                        
-                        <li key={i}
-                            className='flex items-start gap-2 py-1'>
+                    <div className={`overflow-hidden transition-all duration-300 ${openSections[index] ? 'max-h-96' : 'max-h-0'}`}>
+                      
+                      <ul className='list-disc md:pl-10 pl-4 pr-4 py-2 text-zinc-600 border-t border-zinc-300'>
+                        {chapter.chapterContent.map((lecture, i) => (
                           
-                          <img src={progressData && progressData.lectureCompleted.includes(lecture.lectureId) ? assets.blue_tick_icon : assets.play_icon} 
-                                alt='play icon' 
-                              className='w-4 h-4 mt-1' />
+                          <li key={i}
+                              className='flex items-start gap-2 py-1'>
+                            
+                            <img src={progressData && progressData.lectureCompleted.includes(lecture.lectureId) ? assets.green_tick_icon : assets.play_icon} 
+                                  alt='play icon' 
+                                className='w-4 h-4 mt-0.5' />
 
-                          <div className='flex items-center justify-between w-full text-zinc-800 text-xs md:text-default'>
-                            <p>{lecture.lectureTitle}</p>
+                            <div className='flex items-center justify-between w-full text-zinc-800 text-xs md:text-default'>
+                              <p>{lecture.lectureTitle}</p>
 
-                            <div className='flex gap-2'>
-                                {lecture.lectureUrl && 
-                                  <p onClick={() => setPlayerData({
-                                    ...lecture, chapter: index + 1, lecture: i + 1
-                                  })} 
-                                     className='text-green-500 cursor-pointer'>
-                                    Watch
-                                  </p>
-                                }
-                              
-                              <p>
-                                {humanizeDuration(lecture.lectureDuration * 60 * 1000, {units: ['h', 'm']})}
-                              </p>
+                              <div className='flex gap-2'>
+                                  {lecture.lectureUrl && 
+                                    <p onClick={() => setPlayerData({
+                                      ...lecture, chapter: index + 1, lecture: i + 1
+                                    })} 
+                                      className='link-custom-2 font-semibold'>
+                                      Watch
+                                    </p>
+                                  }
+                                
+                                <p>
+                                  {humanizeDuration(lecture.lectureDuration * 60 * 1000, {units: ['h', 'm']})}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className='flex items-center gap-2 py-3 mt-10'>
+                <h1 className='text-xl font-bold'>
+                  Rate this Course:
+                </h1>
+
+                <Rating initialRating={initialRating}
+                        onRate={handleRate} />
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN */}
+            <div className='md:mt-10'>
+              {playerData ? (
+                <div>
+                  <YouTube videoId={playerData.lectureUrl.split('/').pop()} 
+                          iframeClassName='w-full aspect-video' />
+
+                  <div className='flex justify-between items-center mt-3'>
+                    <p>
+                      {playerData.chapter}.{playerData.lecture} - <span className='font-medium'>{playerData.lectureTitle}</span>
+                    </p>
+
+                    <button onClick={() => markLectureAsCompleted(playerData.lectureId)} 
+                            className='link-custom-2 font-semibold'>
+                      {progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? 'Completed' : 'Mark as Complete'}
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
-
-            <div className='flex items-center gap-2 py-3 mt-10'>
-              <h1 className='text-xl font-bold'>
-                Rate this Course:
-              </h1>
-
-              <Rating initialRating={initialRating}
-                      onRate={handleRate} />
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN */}
-          <div className='md:mt-10'>
-            {playerData ? (
-              <div>
-                <YouTube videoId={playerData.lectureUrl.split('/').pop()} 
-                         iframeClassName='w-full aspect-video' />
-
-                {console.log("Lecture URL:", playerData.lectureUrl)}
-                {console.log("Split & Pop result:", playerData.lectureUrl.split('/').pop())}
-
-                <div className='flex justify-between items-center mt-1'>
-                  <p>
-                    {playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}
-                  </p>
-
-                  <button onClick={() => markLectureAsCompleted(playerData.lectureId)} 
-                          className='text-green-600'>
-                    {progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? 'Completed' : 'Mark as Complete'}
-                  </button>
+              )
+              :
+                <div className='rounded-3xl overflow-hidden'>
+                  <img src={courseData ? courseData.courseThumbnail : ''} alt='' />
                 </div>
-              </div>
-            )
-            :
-              <img src={courseData ? courseData.courseThumbnail : ''} alt="" />
-            }
-          </div>
+              }
+            </div>
+        </div>
       </div>
 
       <Footer />
-    </>
-  ) : <Loading />
+    </div>
+  ) : 
+    <Loading />
 }
 
 export default Player

@@ -15,13 +15,14 @@ const Sidebar = () => {
   ]
   
   return isEducator && (
-    <div className='md:w-64 w-16 border-r min-h-screen text-base border-zinc-300 py-2 flex flex-col'>
+    <div className='lg:w-64 w-16 border-r min-h-screen text-md font-medium border-zinc-300 py-2 flex flex-col'>
+        
         {menuItems.map((item) => (
           <NavLink to={item.path} 
                    key={item.name}
                    end={item.path === '/educator'}
-                   className={({isActive}) => `flex items-center md:flex-row flex-col 
-                                              md:justify-start justify-center py-3.5 md:px-10 gap-3 
+                   className={({isActive}) => `flex items-center lg:flex-row flex-col 
+                                              lg:justify-start justify-center py-3.5 lg:px-10 gap-3 
                                               ${isActive ? 'bg-green-600/10 border-r-[6px] border-green-500/90' 
                                               : 'hover:bg-zinc-100/90 border-r-[6px] border-white hover:border-zinc-100/90'}`}>
             
@@ -29,7 +30,7 @@ const Sidebar = () => {
                  alt='' 
                  className='w-6 h-6' />
 
-            <p className='md:block hidden text-center'>
+            <p className='lg:block hidden text-center'>
               {item.name}
             </p>
           </NavLink>

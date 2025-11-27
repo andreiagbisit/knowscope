@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import CourseCard from '../../components/student/CourseCard'
 import { assets } from '../../assets/assets'
 import Footer from '../../components/student/Footer'
+import Loading from '../../components/student/Loading'
 
 const CoursesList = () => {
   
@@ -25,42 +26,67 @@ const CoursesList = () => {
       : setFilteredCourse(tempCourses)
     }
   },[allCourses, input])
+
+  const isLoading = !allCourses || allCourses.length === 0;
+  const noResults = !isLoading && input && filteredCourse.length === 0;
   
   return (
-    <>
-      <div className='relative md:px-36 px-8 pt-20 text-left'>
-        <div className='flex md:flex-row flex-col gap-6 items-start justify-between w-full'>
-          <div>
-            <h1 className='text-4xl font-semibold text-zinc-800'>
-              Course List
-            </h1>
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1">
+        <div className='relative md:px-36 px-8 pt-20 text-left'>
+          <div className='flex md:flex-row flex-col gap-6 items-start justify-between w-full'>
+            <div>
+              <h1 className='text-4xl font-semibold text-zinc-800 pb-1'>
+                Course List
+              </h1>
 
-            <p className='text-zinc-500'>
-              <span className='text-green-600 cursor-pointer' 
-                    onClick={() => navigate('/')}>Home</span> / <span>Course List</span>
-            </p>
+              <p className='text-zinc-500'>
+                <span className='link-custom-2' 
+                      onClick={() => navigate('/')}>Home</span> / <span>Course List</span>
+              </p>
+            </div>
+
+            <SearchBar data={input} />
           </div>
 
-          <SearchBar data={input} />
-        </div>
+          { input && 
+          <div className='inline-flex items-center gap-4 px-4 py-2 border border-zinc-300 rounded-md mt-8 -mb-8 text-zinc-600'>
+            <p className='text-zinc-600'>
+              {input}
+            </p>
+            
+            <img src={assets.cross_icon} 
+                alt='' 
+                className='cursor-pointer'
+                onClick={() => navigate('/course-list')} />
+          </div>
+          }
 
-        { input && <div className='inline-flex items-center gap-4 px-4 py-2 border mt-8 -mb-8 text-zinc-600'>
-          <p>{input}</p>
-          <img src={assets.cross_icon} 
-               alt='' 
-               className='cursor-pointer'
-               onClick={() => navigate('/course-list')} />
-        </div>
-
-        }
-
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-16 gap-3 px-2 md:p-0'>
-          {filteredCourse.map((course, index) => <CourseCard key={index} course={course} />)}
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-16 gap-3 px-2 md:p-0'>
+            { isLoading ? (
+              <div className='col-span-full flex justify-center items-center py-16'>
+                <Loading />
+              </div>
+            ) : noResults ? (
+              <div className='col-span-full flex flex-col justify-center items-center py-16 text-center'>
+                <img src={assets.question_mark} 
+                     className='w-30 opacity-60' 
+                     alt='' />
+                     
+                <p className='text-zinc-600 mt-4 text-lg'>No results found.</p>
+              </div>
+            ) : (
+              filteredCourse.map((course, index) => (
+                <CourseCard key={index} 
+                            course={course} />
+              ))
+            )}
+          </div>
         </div>
       </div>
 
       <Footer />
-    </>
+    </div>
   )
 }
 

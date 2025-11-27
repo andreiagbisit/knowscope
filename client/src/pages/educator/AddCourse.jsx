@@ -156,43 +156,51 @@ const AddCourse = () => {
   return (
     <div className='h-screen overflow-scroll flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0'>
       <form onSubmit={handleSubmit} 
-            className='flex flex-col gap-4 max-w-md w-full text-zinc-500'>
+            className='flex flex-col gap-4 max-w-md w-full text-zinc-600'>
         <div className='flex flex-col gap-1'>
-          <p>Course Title</p>
+          <p className='font-medium'>
+            Course Title
+          </p>
           
           <input onChange={e => setCourseTitle(e.target.value)} 
                  value={courseTitle} 
                  type='text'
                  placeholder='Type here...'
-                 className='outline-none md:py-2.5 py-2 px-3 rounded border border-zinc-500' required />
+                 className='outline-none md:py-2.5 py-2 px-3 rounded-md border border-zinc-300' required />
         </div>
 
         <div className='flex flex-col gap-1'>
-          <p>Course Description</p>
+          <p className='font-medium'>
+            Course Description
+          </p>
           
           <div ref={editorRef}></div>
         </div>
 
         <div className='flex items-center justify-between flex-wrap'>
           <div className='flex flex-col gap-1'>
-            <p>Course Price</p>
+            <p className='font-medium'>
+              Course Price
+            </p>
 
             <input onChange={e => setCoursePrice(e.target.value)} 
                    value={coursePrice} 
                    type='number' 
                    placeholder='0'
-                   className='outline-none md:py-2.5 py-2 w-28 px-3 rounded border border-zinc-500'
+                   className='outline-none md:py-2.5 py-2 w-28 px-3 rounded-md border border-zinc-300'
                    required />
           </div>
 
-          <div className='flex md:flex-row flex-col items-center gap-3'>
-            <p>Course Thumbnail</p>
+          <div className='flex flex-row items-center gap-3'>
+            <p className='font-medium'>
+              Course Thumbnail
+            </p>
 
             <label htmlFor='thumbnailImage' 
                    className='flex items-center gap-3'>
               <img src={assets.file_upload_icon} 
                    alt='' 
-                   className='p-3 bg-green-500 rounded' />
+                   className='button-custom-2 p-3 rounded-md' />
 
               <input type='file' 
                      id='thumbnailImage' 
@@ -208,7 +216,9 @@ const AddCourse = () => {
         </div>
 
         <div className='flex flex-col gap-1'>
-          <p>Discount %</p>
+          <p className='font-medium'>
+            Discount (%)
+          </p>
 
           <input onChange={e => setDiscount(e.target.value)} 
                   value={discount} 
@@ -216,7 +226,7 @@ const AddCourse = () => {
                   placeholder='0' 
                   min={0} 
                   max={100}
-                  className='outline-none md:py-2.5 py-2 w-28 px-3 rounded border border-zinc-500' 
+                  className='outline-none md:py-2.5 py-2 w-28 px-3 rounded-md border border-zinc-300' 
                   required />
         </div>
 
@@ -224,8 +234,8 @@ const AddCourse = () => {
         <div>
           {chapters.map((chapter, chapterIndex) => (
             <div key={chapterIndex}
-                 className='bg-white border rounded-lg mb-4'>
-              <div className='flex justify-between items-center p-4 border-b'>
+                 className='bg-white border rounded-md border-zinc-300 mb-4'>
+              <div className='flex justify-between items-center p-4 border-b border-zinc-300'>
                 <div className='flex items-center'>
                   <img onClick={() => handleChapter('toggle', chapter.chapterId)} 
                        src={assets.dropdown_icon} 
@@ -234,13 +244,13 @@ const AddCourse = () => {
                        className={`mr-2 cursor-pointer transition-all 
                                  ${chapter.collapsed && '-rotate-90'}`} />
 
-                  <span className='font-semibold'>
-                    {chapterIndex + 1} {chapter.chapterTitle}
+                  <span className='font-base'>
+                    {chapterIndex + 1} - <span className='font-semibold'>{chapter.chapterTitle}</span>
                   </span>
                 </div>
 
-                <span className='text-zinc-500'>
-                  {chapter.chapterContent.length} Lectures
+                <span className='text-zinc-600'>
+                  {chapter.chapterContent.length} {chapter.chapterContent.length === 1 ? 'lecture' : 'lectures'}
                 </span>
 
                 <img onClick={() => handleChapter('remove', chapter.chapterId)}
@@ -256,12 +266,13 @@ const AddCourse = () => {
                          className='flex justify-between items-center mb-2'>
                       
                       <span>
-                        {lectureIndex + 1} {lecture.lectureTitle} - {lecture.lectureDuration} mins -
+                        {lectureIndex + 1}: <span className='font-semibold'>{lecture.lectureTitle}</span> - {lecture.lectureDuration} mins -{' '}
+                        
                         <a href={lecture.lectureUrl} 
                            target='_blank' 
-                           className='text-green-500'>
+                           className='link-custom-2 font-semibold'>
                           Link
-                        </a> - {lecture.isPreviewFree ? 'Free Preview' : 'Paid'}
+                        </a> - {lecture.isPreviewFree ? 'Free preview' : 'Paid'}
                       </span>
 
                       <img src={assets.cross_icon} 
@@ -271,32 +282,32 @@ const AddCourse = () => {
                     </div>
                   ))}
 
-                  <div className='inline-flex bg-zinc-100 p-2 rounded cursor-pointer mt-2'
+                  <div className=' button-custom-3 rounded-md cursor-pointer inline-flex mt-2 px-3 py-2'
                        onClick={() => handleLecture('add', chapter.chapterId)}>
-                    + Add Lecture
+                    Add Lecture
                   </div>
                 </div>
               )}
             </div>
           ))}
 
-          <div className='flex justify-center items-center bg-green-100 p-2 rounded-lg cursor-pointer'
+          <div className='button-custom-2 p-2 rounded-md flex justify-center items-center'
                onClick={() => handleChapter('add')}>
-            + Add Chapter
+            Add Chapter
           </div>
 
           {showPopup && (
             <div className='fixed inset-0 flex items-center justify-center bg-zinc-800/50'>
-              <div className='bg-white text-zinc-700 p-4 rounded relative w-full max-w-80'>
+              <div className='bg-white text-zinc-700 p-4 rounded-md relative w-full max-w-80'>
                 <h2 className='text-lg font-semibold mb-4'>
                   Add Lecture
                 </h2>
 
                 <div className='mb-2'>
-                  <p>Lecture Title</p>
+                  <p className='font-medium'>Lecture Title</p>
 
                   <input type='text'
-                         className='mt-1 block w-full border rounded py-1 px-2'
+                         className='mt-1 block w-full border border-zinc-300 rounded-md py-1 px-2'
                          value={lectureDetails.lectureTitle}
                          onChange={(e) => setLectureDetails({
                           ...lectureDetails, lectureTitle: e.target.value
@@ -304,10 +315,10 @@ const AddCourse = () => {
                 </div>
 
                 <div className='mb-2'>
-                  <p>Duration (minutes)</p>
+                  <p className='font-medium'>Duration (minutes)</p>
 
                   <input type='number'
-                         className='mt-1 block w-full border rounded py-1 px-2'
+                         className='mt-1 block w-20 border border-zinc-300 rounded-md py-1 px-2'
                          value={lectureDetails.lectureDuration}
                          onChange={(e) => setLectureDetails({
                           ...lectureDetails, lectureDuration: e.target.value
@@ -315,10 +326,10 @@ const AddCourse = () => {
                 </div>
 
                 <div className='mb-2'>
-                  <p>Lecture URL</p>
+                  <p className='font-medium'>Lecture URL</p>
 
                   <input type='text'
-                         className='mt-1 block w-full border rounded py-1 px-2'
+                         className='mt-1 block w-full border border-zinc-300 rounded-md py-1 px-2'
                          value={lectureDetails.lectureUrl}
                          onChange={(e) => setLectureDetails({
                           ...lectureDetails, lectureUrl: e.target.value
@@ -326,10 +337,12 @@ const AddCourse = () => {
                 </div>
 
                 <div className='flex gap-2 my-4'>
-                  <p>Is preview free?</p>
+                  <p className='font-medium'>
+                    Enable preview
+                  </p>
 
                   <input type='checkbox'
-                         className='mt-1 scale-125'
+                         className='-mt-0.5 scale-125'
                          checked={lectureDetails.isPreviewFree}
                          onChange={(e) => setLectureDetails({
                           ...lectureDetails, isPreviewFree: e.target.checked
@@ -337,9 +350,9 @@ const AddCourse = () => {
                 </div>
 
                 <button type='button' 
-                        className='w-full bg-green-400 text-white px-4 py-2 rounded'
+                        className='button-custom w-full px-4 py-2 rounded-md'
                         onClick={addLecture}>
-                  Add
+                  Add Lecture
                 </button>
 
                 <img onClick={() => setShowPopup(false)} 
@@ -352,8 +365,8 @@ const AddCourse = () => {
         </div>
 
         <button type='submit' 
-                className='bg-black text-white w-max py-2.5 px-8 rounded my-4'>
-          ADD
+                className='button-custom w-max my-4 py-2 px-8 rounded-md'>
+          Add Course
         </button>
       </form>
     </div>

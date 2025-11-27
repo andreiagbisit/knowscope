@@ -39,43 +39,46 @@ const Dashboard = () => {
     <div className='min-h-screen flex flex-col items-start justify-between gap-8 md:p-8 md:pb-0 p-4 pt-8 pb-0'>
       <div className='space-y-5'>
         <div className='flex flex-wrap gap-5 items-center'>
-          <div className='flex items-center gap-3 shadow-card border border-green-500 p-4 w-56 rounded-md'>
-            <img src={assets.patients_icon} alt='patients_icon' />
+          <div className='flex items-center gap-3 shadow-card border border-green-400 p-4 w-56 rounded-md'>
+            <img src={assets.total_enrolments_icon} 
+                 alt='total_enrolments_icon' />
 
             <div>
-              <p className='text-2xl font-medium text-zinc-600'>
-                {dashboardData.enrolledStudentsData.length}
+              <p className='text-2xl font-bold text-green-600'>
+                {dashboardData.enrolledStudentsData.length.toLocaleString()}
               </p>
 
-              <p className='text-md text-zinc-500'>
+              <p className='text-md text-zinc-600'>
                 Total Enrolments
               </p>
             </div>
           </div>
 
-          <div className='flex items-center gap-3 shadow-card border border-green-500 p-4 w-56 rounded-md'>
-            <img src={assets.appointments_icon} alt='appointments_icon' />
+          <div className='flex items-center gap-3 shadow-card border border-green-400 p-4 w-56 rounded-md'>
+            <img src={assets.total_courses_icon} 
+                 alt='total_courses_icon' />
 
             <div>
-              <p className='text-2xl font-medium text-zinc-600'>
-                {dashboardData.totalCourses}
+              <p className='text-2xl font-bold text-green-600'>
+                {dashboardData.totalCourses.toLocaleString()}
               </p>
 
-              <p className='text-md text-zinc-500'>
+              <p className='text-md text-zinc-600'>
                 Total Courses
               </p>
             </div>
           </div>
 
-          <div className='flex items-center gap-3 shadow-card border border-green-500 p-4 w-56 rounded-md'>
-            <img src={assets.earning_icon} alt='earning_icon' />
+          <div className='flex items-center gap-3 shadow-card border border-green-400 p-4 w-56 rounded-md'>
+            <img src={assets.total_earnings_icon} 
+                 alt='total_earnings_icon' />
 
             <div>
-              <p className='text-2xl font-medium text-zinc-600'>
-                {currency}{dashboardData.totalEarnings}
+              <p className='text-2xl font-bold text-green-600'>
+                {currency}{dashboardData.totalEarnings.toLocaleString()}
               </p>
 
-              <p className='text-md text-zinc-500'>
+              <p className='text-md text-zinc-600'>
                 Total Earnings
               </p>
             </div>
@@ -88,7 +91,7 @@ const Dashboard = () => {
           </h2>
 
           <div className='flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-zinc-500/20'>
-            <table className='table-fixed md:table-auto w-full overflow-hidden'>
+            <table className='table-auto w-full overflow-hidden'>
               <thead className='text-zinc-900 border-b border-zinc-500/20 text-sm text-left'>
                 <tr>
                   <th className='px-4 py-3 font-semibold text-center hidden sm:table-cell'>#</th>
@@ -97,28 +100,44 @@ const Dashboard = () => {
                 </tr>
               </thead>
 
-              <tbody className='text-sm text-zinc-500'>
-                {dashboardData.enrolledStudentsData.map((item, index) => (
-                  <tr key={index} className='border-b border-zinc-500/20'>
-                    <td className='px-4 py-3 text-center hidden sm:table-cell'>
-                      {index + 1}
-                    </td>
-                    
-                    <td className='md:px-4 px-2 py-3 flex items-center space-x-3'>
-                      <img src={item.student.imageUrl} 
-                           alt='Profile'
-                           className='w-9 h-9 rounded-full' />
+              <tbody className='text-sm text-zinc-600'>
+                {dashboardData.enrolledStudentsData.length > 0 ? (
+                  dashboardData.enrolledStudentsData.map((item, index) => (
+                    <tr key={index} className='border-b border-zinc-500/20'>
+                      <td className='px-4 py-3 text-center hidden sm:table-cell'>
+                        {index + 1}
+                      </td>
                       
-                      <span className='truncate'>
-                        {item.student.name}
-                      </span>
-                    </td>
+                      <td className='md:px-4 px-2 py-3 flex items-center space-x-3'>
+                        <img src={item.student.imageUrl} 
+                            alt='Profile'
+                            className='w-9 h-9 rounded-full' />
+                        
+                        <span className='whitespace-normal wrap-break-word'>
+                          {item.student.name}
+                        </span>
+                      </td>
 
-                    <td className='px-4 py-3 truncate'>
-                      {item.courseTitle}
+                      <td className='px-4 py-3 whitespace-normal wrap-break-word'>
+                        {item.courseTitle}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan='3'
+                        className='px-4 py-10 text-center'>
+                      
+                      <img src={assets.question_mark}
+                           alt='No entries'
+                           className='h-24 mb-3 mx-auto' />
+
+                      <p className='text-zinc-600 text-base'>
+                        No entries found.
+                      </p>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
 
@@ -127,7 +146,8 @@ const Dashboard = () => {
 
       </div>
     </div>
-  ) : <Loading />
+  ) : 
+    <Loading />
 }
 
 export default Dashboard

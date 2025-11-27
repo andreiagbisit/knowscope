@@ -14,7 +14,7 @@ const SearchBar = ({data}) => {
   
   return (
       <form onSubmit={onSearchHandler} 
-            className='max-w-xl w-full md:h-14 h-12 flex items-center bg-white border border-zinc-500/20 rounded'>
+            className='max-w-xl w-full md:h-14 h-12 flex items-center bg-white border border-zinc-500/40 rounded-md'>
 
         <img src={assets.search_icon} 
              alt='search_icon' 
@@ -24,10 +24,10 @@ const SearchBar = ({data}) => {
                value={input} 
                type='text' 
                placeholder='Search for courses...' 
-               className='w-full h-full outline-none text-zinc-500/80' />
+               className='w-full h-full outline-none text-zinc-600' />
 
         <button type='submit' 
-                className='bg-green-600 rounded text-white md:px-10 px-7 md:py-3 py-2 mx-1'>
+                className='button-custom rounded-md md:px-10 px-7 md:py-3 py-2 mx-1'>
                   Search
         </button>
       </form>

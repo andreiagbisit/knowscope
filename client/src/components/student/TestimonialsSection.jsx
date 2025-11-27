@@ -1,14 +1,16 @@
-import { assets, dummyTestimonial } from "../../assets/assets"
+import { assets, dummyTestimonial } from '../../assets/assets'
 
 const TestimonialsSection = () => {
   return (
-    <div className='pb-14 px-8 md:px-0'>
-        <h2 className='text-3xl font-medium text-zinc-800'>Testimonials</h2>
+    <div className='pb-14 px-8 md:px-24'>
+        <h2 className='text-3xl font-medium text-zinc-800'>
+          Stories from our <span className='font-semibold text-green-600'>learners</span>
+        </h2>
 
-        <p className='md:text-base text-zinc-500 mt-3'>
-          Hear from our learners as they share their journeys of transformation,
-          success, and how our <br/> platform has made a difference in their
-          lives.
+        <p className='md:text-base text-zinc-600 mt-3 max-w-4xl mx-auto'>
+          Discover how our learners transformed their skills and lives—and why they trust 
+          our platform to help them succeed, grow with confidence, and reach their goals 
+          faster than they ever imagined.
         </p>
 
         <div className='grid grid-cols-auto gap-8 mt-14'>
@@ -31,7 +33,7 @@ const TestimonialsSection = () => {
                 </div>
               </div>
 
-              <div className='p-5 pb-7'>
+              <div className='p-5'>
                 <div className='flex gap-0.5'>
                   {[...Array(5)].map((_, i) => (
                     <img className='h-5' 
@@ -41,12 +43,10 @@ const TestimonialsSection = () => {
                   ))}
                 </div>
 
-                <p className='text-zinc-500 mt-5'>
+                <p className='text-zinc-600 mt-5'>
                   {testimonial.feedback}
                 </p>
               </div>
-
-              <a href='#' className='text-green-500 underline px-5'>Read More</a>
             </div>
           ))}
         </div>

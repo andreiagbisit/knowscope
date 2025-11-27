@@ -11,6 +11,8 @@ const Navbar = () => {
   const {navigate, isEducator, backendUrl, setIsEducator, getToken} = useContext(AppContext)
   
   const isCourseListPage = location.pathname.includes('/course-list')
+  const isMyEnrollmentsPage = location.pathname.includes('/my-enrollments')
+  const isPlayerPage = location.pathname.includes('/player/')
 
   const {openSignIn} = useClerk()
   const {user} = useUser()
@@ -41,29 +43,42 @@ const Navbar = () => {
   }
   
   return (
-    <div className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-zinc-500 py-4 
-                    ${isCourseListPage ? 'bg-white' : 'bg-teal-100/70'}`}>
-        <img onClick={() => navigate('/')} src={assets.logo} alt='Logo' className='w-28 lg:w-32 cursor-pointer' />
+    <div className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 py-4 
+                    ${( isCourseListPage || isMyEnrollmentsPage || isPlayerPage ) 
+                      ? 'bg-white' 
+                      : 'bg-teal-100/70'
+                    }`}>
+                      
+        <img onClick={() => navigate('/')} 
+             src={assets.logo} 
+             alt='Logo' 
+             className='w-45 lg:w-55 cursor-pointer' />
 
-        <div className='hidden md:flex items-center gap-5 text-zinc-500'>
+        <div className='hidden md:flex items-center gap-5 text-zinc-600 font-medium'>
           <div className='flex items-center gap-5'>
             { user &&  
             <>
-                <button onClick={becomeEducator}>
+                <button className='link-custom' 
+                        onClick={becomeEducator}>
                   {isEducator ? 'Educator Dashboard' : 'Become an Educator'}
                 </button>
-              | <Link to='/my-enrollments'>My Enrollments</Link>
+                
+              | <Link className='link-custom' 
+                      to='/my-enrollments'>My Enrollments</Link>
             </>
             }
           </div>
 
           { user ? <UserButton /> :
             <button onClick={() => openSignIn()} 
-                  className='bg-green-600 text-white px-5 py-2 rounded-full'>Sign In</button> }
+                    className='bg-green-600 text-white px-5 py-2 rounded-lg transition duration-500 hover:bg-green-500 cursor-pointer font-semibold'>
+                      Sign In
+            </button> 
+          }
         </div>
 
         {/* FOR PHONE SCREENS */}
-        <div className='md:hidden flex items-center gap-2 sm:gap-5 text-zinc-500'>
+        <div className='md:hidden flex items-center gap-2 sm:gap-5 text-zinc-500 font-medium'>
           <div className='flex items-center gap-1 sm:gap-2 max-sm:text-xs'>
             { user &&  
               <>
@@ -76,7 +91,7 @@ const Navbar = () => {
           </div>
           
           {
-            user ? <UserButton /> : <button onClick={() => openSignIn()}><img src={assets.user_icon} alt='' /></button>
+            user ? <UserButton /> : <button onClick={() => openSignIn()}><img src={assets.sign_in_icon} className='opacity-40' alt='' /></button>
           }
         </div>
     </div>
