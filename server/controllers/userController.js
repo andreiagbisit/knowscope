@@ -88,9 +88,6 @@ export const purchaseCourse = async (req, res) => {
 }
 
 // UPDATE USER COURSE PROGRESS
-import Course from '../models/Course.js'
-import { CourseProgress } from '../models/CourseProgress.js'
-
 export const updateUserCourseProgress = async (req, res) => {
     try {
         const { userId } = req.auth()
