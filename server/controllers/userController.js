@@ -93,17 +93,30 @@ export const updateUserCourseProgress = async (req, res) => {
         const { userId } = req.auth()
         const { courseId, lectureId } = req.body
 
+        // Get course and total lectures
         const course = await Course.findById(courseId)
-        const totalLectures = course.courseContent.reduce((sum, chapter) => sum + chapter.chapterContent.length, 0)
+        const totalLectures = course.courseContent.reduce(
+            (sum, chapter) => sum + chapter.chapterContent.length,
+            0
+        )
 
         let progressData = await CourseProgress.findOne({ userId, courseId })
 
         if (progressData) {
-            if (progressData.lectureCompleted.includes(lectureId)) {                
-                progressData.lectureCompleted.push(lectureId)
+            if (progressData.lectureCompleted.includes(lectureId)) {
+                // Check completion even if lecture is already completed
+                if (progressData.lectureCompleted.length >= totalLectures) {
+                    progressData.completed = true
+                    await progressData.save()
+                }
+                return res.json({ success: true, message: 'Lecture already completed.' })
             }
 
+            // Add new lecture
+            progressData.lectureCompleted.push(lectureId)
+
         } else {
+            // Create new progress document
             progressData = new CourseProgress({
                 userId,
                 courseId,
@@ -112,21 +125,19 @@ export const updateUserCourseProgress = async (req, res) => {
             })
         }
 
+        // **Unified course completion check**
         if (progressData.lectureCompleted.length >= totalLectures) {
             progressData.completed = true
         }
-        
-        await progressData.save()
-        const message = progressData.lectureCompleted.includes(lectureId)
-            ? 'Lecture already completed.'
-            : 'Progress updated.'
 
-        res.json({ success: true, message })
-        
+        await progressData.save()
+        res.json({ success: true, message: 'Progress updated.' })
+
     } catch (error) {
         res.json({ success: false, message: error.message })
     }
 }
+
 
 // GET USER COURSE PROGRESS
 export const getUserCourseProgress = async (req, res) => {
