@@ -112,8 +112,7 @@ export const updateUserCourseProgress = async (req, res) => {
         }
 
         const course = await Course.findById(courseId)
-        const totalLectures = course.courseChapters
-        .reduce((sum, chapter) => sum + chapter.chapterContent.length, 0)
+        const totalLectures = course.courseContent.reduce((sum, chapter) => sum + chapter.chapterContent.length, 0)
 
         if (progressData.lectureCompleted.length >= totalLectures) {
             progressData.completed = true
