@@ -92,18 +92,21 @@ export const updateUserCourseProgress = async (req, res) => {
     try {
         const { userId } = req.auth()
         const { courseId, lectureId } = req.body
+
+        const course = await Course.findById(courseId)
+        const totalLectures = course.courseContent.reduce((sum, chapter) => sum + chapter.chapterContent.length, 0)
+
         let progressData = await CourseProgress.findOne({ userId, courseId })
 
         if (progressData) {
-            if (progressData.lectureCompleted.includes(lectureId)) {
+            if (progressData.lectureCompleted.includes(lectureId)) {                
                 return res.json({ success: true, message: 'Lecture already completed.' })
             }
 
             progressData.lectureCompleted.push(lectureId)
-            await progressData.save()
 
         } else {
-            progressData = await CourseProgress.create({
+            await CourseProgress.create({
                 userId,
                 courseId,
                 lectureCompleted: [lectureId],
@@ -111,16 +114,13 @@ export const updateUserCourseProgress = async (req, res) => {
             })
         }
 
-        const course = await Course.findById(courseId)
-        const totalLectures = course.courseContent.reduce((sum, chapter) => sum + chapter.chapterContent.length, 0)
-
         if (progressData.lectureCompleted.length >= totalLectures) {
             progressData.completed = true
         }
-
+        
         await progressData.save()
-
         res.json({ success: true, message: 'Progress updated.' })
+
     } catch (error) {
         res.json({ success: false, message: error.message })
     }
