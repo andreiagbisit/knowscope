@@ -15,7 +15,6 @@ import profile_img_3 from './profile_img_3.png'
 import arrow_icon from './arrow_icon.svg'
 import down_arrow_icon from './down_arrow_icon.svg'
 import time_clock_icon from './time_clock_icon.svg'
-import sign_in_icon from './sign_in_icon.svg'
 import home_icon from './home_icon.svg'
 import add_icon from './add_icon.svg'
 import my_course_icon from './my_course_icon.svg'
@@ -53,7 +52,6 @@ export const assets = {
     cross_icon,
     down_arrow_icon,
     time_clock_icon,
-    sign_in_icon,
     home_icon,
     add_icon,
     my_course_icon,

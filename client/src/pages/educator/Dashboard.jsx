@@ -4,6 +4,7 @@ import { assets } from '../../assets/assets'
 import Loading from '../../components/student/Loading'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import pageTitle from '../../lib/pageTitle'
 
 const Dashboard = () => {
   
@@ -35,11 +36,17 @@ const Dashboard = () => {
     }
   }, [isEducator])
 
+  pageTitle('Dashboard | Knowscope (Educator)')
+  
   return dashboardData ? (
     <div className='min-h-screen flex flex-col items-start justify-between gap-8 md:p-8 md:pb-0 p-4 pt-8 pb-0'>
       <div className='space-y-5'>
+        <h2 className=' text-2xl font-semibold text-green-600'>
+          Dashboard
+        </h2>
+        
         <div className='flex flex-wrap gap-5 items-center'>
-          <div className='flex items-center gap-3 shadow-card border border-green-400 p-4 w-56 rounded-md'>
+          <div className='flex items-center gap-3 shadow-card border border-lime-500 p-4 w-56 rounded-md'>
             <img src={assets.total_enrolments_icon} 
                  alt='total_enrolments_icon' />
 
@@ -54,7 +61,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className='flex items-center gap-3 shadow-card border border-green-400 p-4 w-56 rounded-md'>
+          <div className='flex items-center gap-3 shadow-card border border-lime-500 p-4 w-56 rounded-md'>
             <img src={assets.total_courses_icon} 
                  alt='total_courses_icon' />
 
@@ -69,7 +76,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className='flex items-center gap-3 shadow-card border border-green-400 p-4 w-56 rounded-md'>
+          <div className='flex items-center gap-3 shadow-card border border-lime-500 p-4 w-56 rounded-md'>
             <img src={assets.total_earnings_icon} 
                  alt='total_earnings_icon' />
 

@@ -9,6 +9,7 @@ import YouTube from 'react-youtube'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import SliceDesc from '../../components/student/SliceDesc'
+import pageTitle from '../../lib/pageTitle'
 
 const CourseDetails = () => {
   const {id} = useParams()
@@ -18,7 +19,7 @@ const CourseDetails = () => {
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false)
   const [playerData, setPlayerData] = useState(null)
 
-  const {allCourses, calculateRating, calculateNoOfLectures, calculateCourseDuration, calculateChapterTime, currency, backendUrl, userData, getToken} = useContext(AppContext)
+  const { calculateRating, calculateNoOfLectures, calculateCourseDuration, calculateChapterTime, currency, backendUrl, userData, getToken} = useContext(AppContext)
 
   const fetchCourseData = async () => {
     try {
@@ -80,7 +81,13 @@ const CourseDetails = () => {
       }
     ))
   }
-  
+
+  useEffect(() => {
+    if (courseData) {
+      pageTitle(`${courseData.courseTitle} | Knowscope`)
+    }
+  }, [courseData])
+
   return courseData ? (
     <>
       <div className='flex lg:flex-row flex-col-reverse gap-10 relative items-start justify-between lg:px-20 xl:px-36 px-8 md:pt-20 pt-10 text-left isolate'>

@@ -6,8 +6,9 @@ import CourseCard from '../../components/student/CourseCard'
 import { assets } from '../../assets/assets'
 import Footer from '../../components/student/Footer'
 import Loading from '../../components/student/Loading'
+import pageTitle from '../../lib/pageTitle'
 
-const CoursesList = () => {
+const CourseList = () => {
   
   const {navigate, allCourses} = useContext(AppContext)
   const {input} = useParams()
@@ -30,11 +31,15 @@ const CoursesList = () => {
   const isLoading = !allCourses || allCourses.length === 0;
   const noResults = !isLoading && input && filteredCourse.length === 0;
   
+  useEffect(() => {
+    pageTitle(input ? `Course Search: '${input}' | Knowscope` : 'Course List | Knowscope');
+  }, [input]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1">
-        <div className='relative md:px-36 px-8 pt-20 text-left'>
-          <div className='flex md:flex-row flex-col gap-6 items-start justify-between w-full'>
+        <div className='relative lg:px-36 md:px-14 px-8 pt-20 text-left'>
+          <div className='flex xl:flex-row flex-col gap-6 items-start justify-between w-full'>
             <div>
               <h1 className='text-4xl font-semibold text-zinc-800 pb-1'>
                 Course List
@@ -62,7 +67,7 @@ const CoursesList = () => {
           </div>
           }
 
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-16 gap-3 px-2 md:p-0'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 my-16 gap-3 px-2 md:p-0'>
             { isLoading ? (
               <div className='col-span-full flex justify-center items-center py-16'>
                 <Loading />
@@ -90,4 +95,4 @@ const CoursesList = () => {
   )
 }
 
-export default CoursesList
+export default CourseList

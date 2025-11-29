@@ -51,6 +51,10 @@
   .button-custom-3 {
     @apply text-zinc-600 font-medium transition duration-500 border border-zinc-300 hover:bg-zinc-100 cursor-pointer;
   }
+
+  .sign-in-wrapper {
+    @apply min-h-screen flex justify-center items-center;
+  }
 }
 
 *{

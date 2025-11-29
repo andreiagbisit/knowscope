@@ -9,6 +9,7 @@ import Rating from '../../components/student/Rating'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Loading from '../../components/student/Loading'
+import pageTitle from '../../lib/pageTitle'
 
 const Player = () => {
   
@@ -114,6 +115,12 @@ const Player = () => {
   useEffect(() => {
     getCourseProgress()
   },[])
+
+  useEffect(() => {
+    if (courseData) {
+      pageTitle(`${courseData.courseTitle} | Knowscope`)
+    }
+  }, [courseData])
 
   return courseData ?  (
     <div className='min-h-screen flex flex-col'>

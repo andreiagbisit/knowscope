@@ -15,16 +15,16 @@ const Sidebar = () => {
   ]
   
   return isEducator && (
-    <div className='lg:w-64 w-16 border-r min-h-screen text-md font-medium border-zinc-300 py-2 flex flex-col'>
+    <div className='lg:w-64 w-16 min-h-screen text-md text-zinc-800 font-semibold py-2 flex flex-col bg-linear-45 from-green-400 to-lime-300'>
         
         {menuItems.map((item) => (
           <NavLink to={item.path} 
                    key={item.name}
                    end={item.path === '/educator'}
                    className={({isActive}) => `flex items-center lg:flex-row flex-col 
-                                              lg:justify-start justify-center py-3.5 lg:px-10 gap-3 
-                                              ${isActive ? 'bg-green-600/10 border-r-[6px] border-green-500/90' 
-                                              : 'hover:bg-zinc-100/90 border-r-[6px] border-white hover:border-zinc-100/90'}`}>
+                                              lg:justify-start justify-center py-3.5 lg:px-10 gap-3 transition duration-500
+                                              ${isActive ? 'bg-green-600/30 border-r-[6px] border-green-600' 
+                                              : 'hover:bg-lime-100/90'}`}>
             
             <img src={item.icon} 
                  alt='' 

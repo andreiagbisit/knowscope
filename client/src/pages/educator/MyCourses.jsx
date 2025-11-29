@@ -4,6 +4,7 @@ import Loading from '../../components/student/Loading'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../assets/assets'
+import pageTitle from '../../lib/pageTitle'
 
 const MyCourses = () => {
   
@@ -32,11 +33,12 @@ const MyCourses = () => {
     
   }, [isEducator])
 
+  pageTitle('My Courses | Knowscope (Educator)')
   
   return courses ? (
     <div className='h-screen flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0'>
       <div className='w-full'>
-        <h2 className='pb-4 text-lg font-medium'>
+        <h2 className=' text-2xl font-semibold text-green-600 mb-5'>
           My Courses
         </h2>
 

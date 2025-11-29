@@ -9,7 +9,13 @@ const SearchBar = ({data}) => {
   
   const onSearchHandler = (e) => {
     e.preventDefault()
-    navigate('/course-list/' + input)
+
+    if (!input.trim()) {
+      navigate('/course-list')
+      return
+    }
+
+    navigate('/course-list/' + encodeURIComponent(input))
   }
   
   return (

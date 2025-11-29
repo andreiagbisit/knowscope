@@ -4,6 +4,7 @@ import { Line } from 'rc-progress'
 import Footer from '../../components/student/Footer'
 import axios from 'axios'
 import { assets } from '../../assets/assets'
+import pageTitle from '../../lib/pageTitle'
 
 const MyEnrollments = () => {
   
@@ -48,6 +49,8 @@ const MyEnrollments = () => {
     }
   }, [enrolledCourses])
 
+  pageTitle('My Enrollments | Knowscope')
+  
   return (
     <div className='min-h-screen flex flex-col'>
       <div className="flex-1">

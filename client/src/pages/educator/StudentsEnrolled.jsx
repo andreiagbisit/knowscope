@@ -4,6 +4,7 @@ import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../assets/assets'
+import pageTitle from '../../lib/pageTitle'
 
 const StudentsEnrolled = () => {
   
@@ -34,64 +35,72 @@ const StudentsEnrolled = () => {
       fetchEnrolledStudents()
     }
   }, [isEducator])
+
+  pageTitle('Students Enrolled | Knowscope (Educator)')
   
   return enrolledStudents ? (
     <div className='min-h-screen flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0'>
-        <div className='flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-zinc-500/20'>
-          <table className='table-auto w-full overflow-hidden pb-4'>
-            <thead className='text-zinc-900 border-b border-zinc-500/20 text-sm text-left'>
-              <tr>
-                <th className='px-4 py-3 font-semibold text-center hidden sm:table-cell'>#</th>
-                <th className='px-4 py-3 font-semibold'>Student Name</th>
-                <th className='px-4 py-3 font-semibold'>Course Title</th>
-                <th className='px-4 py-3 font-semibold hidden sm:table-cell'>Date</th>
-              </tr>
-            </thead>
+        <div className='w-full'>
+          <h2 className=' text-2xl font-semibold text-green-600 mb-5'>
+            Students Enrolled
+          </h2>
 
-            <tbody className='text-sm text-zinc-600'>
-              {enrolledStudents.length > 0 ? (
-                enrolledStudents.map((item, index) => (
-                  <tr key={index} className='border-b border-zinc-500/20'>
-                    <td className='px-4 py-3 text-center hidden sm:table-cell'>
-                      {index + 1}
-                    </td>
+          <div className='flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-zinc-500/20'>
+            <table className='table-auto w-full overflow-hidden pb-4'>
+              <thead className='text-zinc-900 border-b border-zinc-500/20 text-sm text-left'>
+                <tr>
+                  <th className='px-4 py-3 font-semibold text-center hidden sm:table-cell'>#</th>
+                  <th className='px-4 py-3 font-semibold'>Student Name</th>
+                  <th className='px-4 py-3 font-semibold'>Course Title</th>
+                  <th className='px-4 py-3 font-semibold hidden sm:table-cell'>Date</th>
+                </tr>
+              </thead>
 
-                    <td className='md:px-4 px-2 py-3 flex items-center space-x-3'>
-                      <img src={item.student.imageUrl} 
-                          alt=''
-                          className='w-9 h-9 rounded-full' />
+              <tbody className='text-sm text-zinc-600'>
+                {enrolledStudents.length > 0 ? (
+                  enrolledStudents.map((item, index) => (
+                    <tr key={index} className='border-b border-zinc-500/20'>
+                      <td className='px-4 py-3 text-center hidden sm:table-cell'>
+                        {index + 1}
+                      </td>
+
+                      <td className='md:px-4 px-2 py-3 flex items-center space-x-3'>
+                        <img src={item.student.imageUrl} 
+                            alt=''
+                            className='w-9 h-9 rounded-full' />
+                        
+                        <span className='whitespace-normal wrap-break-word'>
+                          {item.student.name}
+                        </span>
+                      </td>
+
+                      <td className='px-4 py-3 whitespace-normal wrap-break-word'>
+                        {item.courseTitle}
+                      </td>
+
+                      <td className='px-4 py-3 hidden sm:table-cell'>
+                        {new Date(item.purchaseDate).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan='4'
+                        className='px-4 py-10 text-center'>
                       
-                      <span className='whitespace-normal wrap-break-word'>
-                        {item.student.name}
-                      </span>
-                    </td>
+                      <img src={assets.question_mark}
+                            alt='No entries'
+                            className='h-24 mb-3 mx-auto' />
 
-                    <td className='px-4 py-3 whitespace-normal wrap-break-word'>
-                      {item.courseTitle}
-                    </td>
-
-                    <td className='px-4 py-3 hidden sm:table-cell'>
-                      {new Date(item.purchaseDate).toLocaleDateString()}
+                      <p className='text-zinc-600 text-base'>
+                        No entries found.
+                      </p>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan='4'
-                      className='px-4 py-10 text-center'>
-                    
-                    <img src={assets.question_mark}
-                          alt='No entries'
-                          className='h-24 mb-3 mx-auto' />
-
-                    <p className='text-zinc-600 text-base'>
-                      No entries found.
-                    </p>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
     </div>
   ) : 

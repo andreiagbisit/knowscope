@@ -5,6 +5,7 @@ import { assets } from '../../assets/assets'
 import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import pageTitle from '../../lib/pageTitle'
 
 const AddCourse = () => {
   
@@ -153,11 +154,18 @@ const AddCourse = () => {
     }
   },[])
   
+  pageTitle('Add Course | Knowscope (Educator)')
+  
   return (
     <div className='h-screen overflow-scroll flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0'>
       <form onSubmit={handleSubmit} 
             className='flex flex-col gap-4 max-w-md w-full text-zinc-600'>
+        
         <div className='flex flex-col gap-1'>
+          <h2 className=' text-2xl font-semibold text-green-600 mb-3'>
+            Add Course
+          </h2>
+          
           <p className='font-medium'>
             Course Title
           </p>
