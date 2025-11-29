@@ -88,23 +88,25 @@ export const purchaseCourse = async (req, res) => {
 }
 
 // UPDATE USER COURSE PROGRESS
+import Course from '../models/Course.js'
+import { CourseProgress } from '../models/CourseProgress.js'
+
 export const updateUserCourseProgress = async (req, res) => {
     try {
         const { userId } = req.auth()
         const { courseId, lectureId } = req.body
 
-        // Get course and total lectures
+        // Fetch course to know total lectures
         const course = await Course.findById(courseId)
         const totalLectures = course.courseContent.reduce(
-            (sum, chapter) => sum + chapter.chapterContent.length,
-            0
+            (sum, chapter) => sum + chapter.chapterContent.length, 0
         )
 
         let progressData = await CourseProgress.findOne({ userId, courseId })
 
         if (progressData) {
             if (progressData.lectureCompleted.includes(lectureId)) {
-                // Check completion even if lecture is already completed
+                // Check if course should be marked completed even if lecture already done
                 if (progressData.lectureCompleted.length >= totalLectures) {
                     progressData.completed = true
                     await progressData.save()
@@ -112,11 +114,10 @@ export const updateUserCourseProgress = async (req, res) => {
                 return res.json({ success: true, message: 'Lecture already completed.' })
             }
 
-            // Add new lecture
             progressData.lectureCompleted.push(lectureId)
 
         } else {
-            // Create new progress document
+            // Create new progress entry in memory
             progressData = new CourseProgress({
                 userId,
                 courseId,
@@ -125,7 +126,7 @@ export const updateUserCourseProgress = async (req, res) => {
             })
         }
 
-        // **Unified course completion check**
+        // Mark course as completed if all lectures done
         if (progressData.lectureCompleted.length >= totalLectures) {
             progressData.completed = true
         }
