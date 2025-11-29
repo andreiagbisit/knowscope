@@ -93,10 +93,7 @@ export const updateUserCourseProgress = async (req, res) => {
         const { userId } = req.auth()
         const { courseId, lectureId } = req.body
 
-        // Fetch progress
-        let progressData = await CourseProgress.findOne({ userId, courseId })
-
-        // Fetch course to count total lectures
+        const progressData = await CourseProgress.findOne({ userId, courseId })
         const course = await Course.findById(courseId)
         const totalLectures = course.courseContent.reduce(
             (sum, chapter) => sum + chapter.chapterContent.length,
@@ -104,28 +101,34 @@ export const updateUserCourseProgress = async (req, res) => {
         )
 
         if (progressData) {
-            if (!progressData.lectureCompleted.includes(lectureId)) {
-                // Add lecture to completed list
-                progressData.lectureCompleted.push(lectureId)
+            if (progressData.lectureCompleted.includes(lectureId)) {
+                // Check if all lectures are done and mark course as completed
+                if (progressData.lectureCompleted.length >= totalLectures) {
+                    progressData.completed = true
+                    await progressData.save()
+                }
+                return res.json({ success: true, message: 'Lecture already completed.' })
             }
 
-            // Check if course should be marked completed
+            progressData.lectureCompleted.push(lectureId)
+
+            // After adding the lecture, check if all lectures are done
             if (progressData.lectureCompleted.length >= totalLectures) {
                 progressData.completed = true
             }
 
             await progressData.save()
-            return res.json({ success: true, message: 'Progress updated.' })
-        }
 
-        // Create new progress entry for first lecture
-        const completed = [lectureId].length >= totalLectures
-        progressData = await CourseProgress.create({
-            userId,
-            courseId,
-            lectureCompleted: [lectureId],
-            completed
-        })
+        } else {
+            // New progress document
+            const completed = [lectureId].length >= totalLectures
+            await CourseProgress.create({
+                userId,
+                courseId,
+                lectureCompleted: [lectureId],
+                completed
+            })
+        }
 
         res.json({ success: true, message: 'Progress updated.' })
     } catch (error) {
