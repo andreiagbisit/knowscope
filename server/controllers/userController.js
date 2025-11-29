@@ -104,30 +104,28 @@ export const updateUserCourseProgress = async (req, res) => {
         )
 
         if (progressData) {
-            if (progressData.lectureCompleted.includes(lectureId)) {
-                // Lecture already completed
-                return res.json({ success: true, message: 'Lecture already completed.' })
+            if (!progressData.lectureCompleted.includes(lectureId)) {
+                // Add lecture to completed list
+                progressData.lectureCompleted.push(lectureId)
             }
 
-            // Add lecture to completed list
-            progressData.lectureCompleted.push(lectureId)
+            // Check if course should be marked completed
+            if (progressData.lectureCompleted.length >= totalLectures) {
+                progressData.completed = true
+            }
 
-        } else {
-            // Create new progress entry
-            progressData = new CourseProgress({
-                userId,
-                courseId,
-                lectureCompleted: [lectureId],
-                completed: false
-            })
+            await progressData.save()
+            return res.json({ success: true, message: 'Progress updated.' })
         }
 
-        // Mark as completed if all lectures are done
-        if (progressData.lectureCompleted.length >= totalLectures) {
-            progressData.completed = true
-        }
-
-        await progressData.save()
+        // Create new progress entry for first lecture
+        const completed = [lectureId].length >= totalLectures
+        progressData = await CourseProgress.create({
+            userId,
+            courseId,
+            lectureCompleted: [lectureId],
+            completed
+        })
 
         res.json({ success: true, message: 'Progress updated.' })
     } catch (error) {
