@@ -100,13 +100,11 @@ export const updateUserCourseProgress = async (req, res) => {
 
         if (progressData) {
             if (progressData.lectureCompleted.includes(lectureId)) {                
-                return res.json({ success: true, message: 'Lecture already completed.' })
+                progressData.lectureCompleted.push(lectureId)
             }
 
-            progressData.lectureCompleted.push(lectureId)
-
         } else {
-            progressData = await CourseProgress.create({
+            progressData = new CourseProgress({
                 userId,
                 courseId,
                 lectureCompleted: [lectureId],
@@ -119,8 +117,12 @@ export const updateUserCourseProgress = async (req, res) => {
         }
         
         await progressData.save()
-        res.json({ success: true, message: 'Progress updated.' })
+        const message = progressData.lectureCompleted.includes(lectureId)
+            ? 'Lecture already completed.'
+            : 'Progress updated.'
 
+        res.json({ success: true, message })
+        
     } catch (error) {
         res.json({ success: false, message: error.message })
     }
