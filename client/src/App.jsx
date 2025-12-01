@@ -16,12 +16,15 @@ import 'quill/dist/quill.snow.css'
 import { ToastContainer } from 'react-toastify'
 import { SignIn, useUser } from '@clerk/clerk-react'
 import EducatorGate from './components/educator/EducatorGate'
-import AuthLoader from './components/educator/AuthLoader'
+import { useContext } from 'react'
+import { AppContext } from './context/AppContext'
 
 const App = () => {
   
   const isEducatorRoute = useMatch('/educator/*')
   const { isSignedIn } = useUser()
+  const { isAuthLoaded } = useContext(AppContext)
+  if (!isAuthLoaded) return <Loading />
   const location = useLocation()
   const hideNavbar = (!isSignedIn && location.pathname === '/my-enrollments')
   
@@ -30,38 +33,36 @@ const App = () => {
       <ToastContainer />
       {!isEducatorRoute && !hideNavbar && <Navbar />}
       
-      <AuthLoader>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/course-list/:input' element={<CourseList />} />
-          <Route path='/course-list' element={<CourseList />} />
-          <Route path='/course/:id' element={<CourseDetails />} />
-          <Route path='/player/:courseId' element={<Player />} />
-          <Route path='/loading/:path' element={<Loading />} />
-          
-          <Route path='/my-enrollments' element={
-            (() => {
-              const { isLoaded, isSignedIn } = useUser()
-              if (!isLoaded) return <Loading />
-              return isSignedIn ? <MyEnrollments /> : 
-              
-              <div className='sign-in-wrapper'>
-                <SignIn fallbackRedirectUrl='/my-enrollments' />
-              </div>
-            })()
-          } />
-          
-          <Route path='/educator' element={<EducatorGate />}>
-            <Route path='/educator' element={<Dashboard />} />
-            <Route path='add-course' element={<AddCourse />} />
-            <Route path='my-courses' element={<MyCourses />} />
-            <Route path='students-enrolled' element={<StudentsEnrolled />} />
-            <Route path="*" element={<PageNotFoundEducator />} />
-          </Route>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/course-list/:input' element={<CourseList />} />
+        <Route path='/course-list' element={<CourseList />} />
+        <Route path='/course/:id' element={<CourseDetails />} />
+        <Route path='/player/:courseId' element={<Player />} />
+        <Route path='/loading/:path' element={<Loading />} />
+        
+        <Route path='/my-enrollments' element={
+          (() => {
+            const { isLoaded, isSignedIn } = useUser()
+            if (!isLoaded) return <Loading />
+            return isSignedIn ? <MyEnrollments /> : 
+            
+            <div className='sign-in-wrapper'>
+              <SignIn fallbackRedirectUrl='/my-enrollments' />
+            </div>
+          })()
+        } />
+        
+        <Route path='/educator' element={<EducatorGate />}>
+          <Route path='/educator' element={<Dashboard />} />
+          <Route path='add-course' element={<AddCourse />} />
+          <Route path='my-courses' element={<MyCourses />} />
+          <Route path='students-enrolled' element={<StudentsEnrolled />} />
+          <Route path="*" element={<PageNotFoundEducator />} />
+        </Route>
 
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </AuthLoader>
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
     </div>
   )
 }
