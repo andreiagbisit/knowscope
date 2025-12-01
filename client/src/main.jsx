@@ -13,7 +13,6 @@ if (!PUBLISHABLE_KEY) {
 }
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} 
                    afterSignOutUrl='/'
                    appearance={{
@@ -21,9 +20,10 @@ createRoot(document.getElementById('root')).render(
                       colorPrimary: '#00A63E',
                     },
                    }}>
-      <AppContextProvider>
-        <App />
-      </AppContextProvider>
-    </ClerkProvider>
-  </BrowserRouter>,
+      <BrowserRouter>
+        <AppContextProvider>
+          <App />
+        </AppContextProvider>
+      </BrowserRouter>
+    </ClerkProvider>,
 )
