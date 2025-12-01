@@ -21,14 +21,11 @@ import ProtectedRoute from './components/student/ProtectedRoute'
 const App = () => {
   
   const isEducatorRoute = useMatch('/educator/*')
-  const { isSignedIn } = useUser()
-  const location = useLocation()
-  const hideNavbar = (!isSignedIn && location.pathname === '/my-enrollments')
   
   return (
     <div className='text-default min-h-screen bg-white'>
       <ToastContainer />
-      {!isEducatorRoute && !hideNavbar && <Navbar />}
+      {!isEducatorRoute && <Navbar />}
       
       <Routes>
         <Route path='/' element={<Home />} />
