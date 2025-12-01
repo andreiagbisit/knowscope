@@ -15,9 +15,9 @@ export const AppContextProvider = (props) => {
     const navigate = useNavigate()
 
     const {getToken} = useAuth()
-    const {user} = useUser()
-    const [isAuthLoaded, setIsAuthLoaded] = useState(false)
+    const {user, isLoaded} = useUser()
 
+    const [isAuthLoaded, setIsAuthLoaded] = useState(false)
     const [allCourses, setAllCourses] = useState([])
     const [isEducator, setIsEducator] = useState(false)
     const [enrolledCourses, setEnrolledCourses] = useState([])
@@ -132,18 +132,11 @@ export const AppContextProvider = (props) => {
     },[])
 
     useEffect(() => {
+        if (!isLoaded) return
+        
         if(user) {
             fetchUserData()
             fetchUserEnrolledCourses()
-        }
-
-        if (isLoaded) {
-            if (user) {
-                fetchUserData()
-                fetchUserEnrolledCourses()
-            }
-            
-            setIsAuthLoaded(true)
         }
     },[isLoaded, user])
 
