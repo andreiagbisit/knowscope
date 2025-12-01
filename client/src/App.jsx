@@ -38,11 +38,7 @@ const App = () => {
         <Route path='/player/:courseId' element={<Player />} />
         <Route path='/loading/:path' element={<Loading />} />
         
-        <Route path='/my-enrollments' element={
-          <ProtectedRoute redirectUrl='/my-enrollments'>
-            <MyEnrollments />
-          </ProtectedRoute>
-        } />
+        <Route path='/my-enrollments' element={<MyEnrollments />} />
         
         <Route path='/educator' element={<EducatorGate />}>
           <Route path='/educator' element={<Dashboard />} />
