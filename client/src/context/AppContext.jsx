@@ -17,7 +17,6 @@ export const AppContextProvider = (props) => {
     const {getToken} = useAuth()
     const {user, isLoaded} = useUser()
 
-    const [isAuthLoaded, setIsAuthLoaded] = useState(false)
     const [allCourses, setAllCourses] = useState([])
     const [isEducator, setIsEducator] = useState(false)
     const [enrolledCourses, setEnrolledCourses] = useState([])
@@ -128,25 +127,25 @@ export const AppContextProvider = (props) => {
     }
     
     useEffect(() => {
-        fetchAllCourses()
-    },[])
-
-    useEffect(() => {
         if (!isLoaded) return
-        
-        if(user) {
+
+        fetchAllCourses()
+
+        if (user) {
+            if (user.publicMetadata.role === 'educator') {
+                setIsEducator(true)
+            }
+
             fetchUserData()
             fetchUserEnrolledCourses()
         }
-
-        setIsAuthLoaded(true)
-    },[isLoaded, user])
+    }, [isLoaded, user])
 
     const value = {
         currency, allCourses, navigate, calculateRating,
         isEducator, setIsEducator, calculateNoOfLectures, calculateCourseDuration,
         calculateChapterTime, enrolledCourses, fetchUserEnrolledCourses,
-        backendUrl, userData, setUserData, getToken, fetchAllCourses, isAuthLoaded
+        backendUrl, userData, setUserData, getToken, fetchAllCourses
     }
     
     return (

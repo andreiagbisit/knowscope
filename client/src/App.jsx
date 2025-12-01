@@ -16,15 +16,11 @@ import 'quill/dist/quill.snow.css'
 import { ToastContainer } from 'react-toastify'
 import { SignIn, useUser } from '@clerk/clerk-react'
 import EducatorGate from './components/educator/EducatorGate'
-import { useContext } from 'react'
-import { AppContext } from './context/AppContext'
 
 const App = () => {
   
   const isEducatorRoute = useMatch('/educator/*')
   const { isSignedIn } = useUser()
-  const { isAuthLoaded } = useContext(AppContext)
-  if (!isAuthLoaded) return <Loading />
   const location = useLocation()
   const hideNavbar = (!isSignedIn && location.pathname === '/my-enrollments')
   
