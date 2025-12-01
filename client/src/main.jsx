@@ -13,16 +13,16 @@ if (!PUBLISHABLE_KEY) {
 }
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}
-                   appearance={{
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY}
+                  appearance={{
                     variables: {
                       colorPrimary: '#00A63E',
                     },
-                   }}>
+                  }}>
+    <BrowserRouter>
       <AppContextProvider>
         <App />
       </AppContextProvider>
-    </ClerkProvider>
-  </BrowserRouter>,
+    </BrowserRouter>
+  </ClerkProvider>,
 )
