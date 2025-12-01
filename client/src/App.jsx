@@ -49,10 +49,10 @@ const App = () => {
           <Route path='add-course' element={<AddCourse />} />
           <Route path='my-courses' element={<MyCourses />} />
           <Route path='students-enrolled' element={<StudentsEnrolled />} />
-          <Route path="*" element={<PageNotFoundEducator />} />
+          <Route path='*' element={<PageNotFoundEducator />} />
         </Route>
 
-        <Route path="*" element={<PageNotFound />} />
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
     </div>
   )
