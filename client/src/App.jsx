@@ -14,8 +14,9 @@ import PageNotFound from './components/student/PageNotFound'
 import PageNotFoundEducator from './components/educator/PageNotFoundEducator'
 import 'quill/dist/quill.snow.css'
 import { ToastContainer } from 'react-toastify'
-import { SignIn, useUser } from '@clerk/clerk-react'
+import { useUser } from '@clerk/clerk-react'
 import EducatorGate from './components/educator/EducatorGate'
+import ProtectedRoute from './components/student/ProtectedRoute'
 
 const App = () => {
   
@@ -38,15 +39,9 @@ const App = () => {
         <Route path='/loading/:path' element={<Loading />} />
         
         <Route path='/my-enrollments' element={
-          (() => {
-            const { isLoaded, isSignedIn } = useUser()
-            if (!isLoaded) return <Loading />
-            return isSignedIn ? <MyEnrollments /> : 
-            
-            <div className='sign-in-wrapper'>
-              <SignIn fallbackRedirectUrl='/my-enrollments' />
-            </div>
-          })()
+          <ProtectedRoute redirectUrl='/my-enrollments'>
+            <MyEnrollments />
+          </ProtectedRoute>
         } />
         
         <Route path='/educator' element={<EducatorGate />}>
