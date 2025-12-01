@@ -138,6 +138,8 @@ export const AppContextProvider = (props) => {
             fetchUserData()
             fetchUserEnrolledCourses()
         }
+
+        setIsAuthLoaded(true)
     },[isLoaded, user])
 
     const value = {
