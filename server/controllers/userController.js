@@ -89,31 +89,69 @@ export const purchaseCourse = async (req, res) => {
 
 // UPDATE USER COURSE PROGRESS
 export const updateUserCourseProgress = async (req, res) => {
-    try {
-        const { userId } = req.auth()
-        const { courseId, lectureId } = req.body
-        const progressData = await CourseProgress.findOne({ userId, courseId })
+  try {
+    const { userId } = req.auth()
+    const { courseId, lectureId } = req.body
 
-        if (progressData) {
-            if (progressData.lectureCompleted.includes(lectureId)) {
-                return res.json({ success: true, message: 'Lecture already completed.' })
-            }
+    let progressData = await CourseProgress.findOne({ userId, courseId })
 
-            progressData.lectureCompleted.push(lectureId)
-            await progressData.save()
-
-        } else {
-            await CourseProgress.create({
-                userId,
-                courseId,
-                lectureCompleted: [lectureId]
-            })
-        }
-
-        res.json({ success: true, message: 'Progress updated.' })
-    } catch (error) {
-        res.json({ success: false, message: error.message })
+    const courseData = await Course.findById(courseId)
+    if (!courseData) {
+      return res.json({ success: false, message: 'Course not found.' })
     }
+
+    const allLectures = courseData.courseContent.flatMap(chapter =>
+      chapter.chapterContent.map(lec => lec.lectureId)
+    )
+
+    if (!progressData) {
+      if (lectureId !== allLectures[0]) {
+        return res.json({ 
+          success: false, 
+          message: 'Please complete the current lecture first.' 
+        })
+      }
+
+      progressData = await CourseProgress.create({
+        userId,
+        courseId,
+        lectureCompleted: [lectureId],
+        completed: false
+      })
+
+      return res.json({ success: true, message: 'Lecture marked as completed.', completed: false })
+    }
+
+    if (progressData.lectureCompleted.includes(lectureId)) {
+      return res.json({ success: true, message: 'Lecture already completed.', completed: progressData.completed })
+    }
+
+    const nextLectureToComplete = allLectures.find(l => !progressData.lectureCompleted.includes(l))
+    if (lectureId !== nextLectureToComplete) {
+      return res.json({ 
+        success: false, 
+        message: 'Please complete the current lecture first.' 
+      })
+    }
+
+    progressData.lectureCompleted.push(lectureId)
+
+    if (progressData.lectureCompleted.length === allLectures.length) {
+      progressData.completed = true
+      await progressData.save()
+      return res.json({ 
+        success: true, 
+        message: 'Congratulations! You have finished the course.', 
+        completed: true 
+      })
+    }
+
+    await progressData.save()
+    res.json({ success: true, message: 'Lecture marked as completed.', completed: false })
+
+  } catch (error) {
+    res.json({ success: false, message: error.message })
+  }
 }
 
 // GET USER COURSE PROGRESS

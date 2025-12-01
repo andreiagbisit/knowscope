@@ -10,7 +10,7 @@ const CourseCard = ({course}) => {
   return (
     <Link to={'/course/' + course._id} 
           onClick={() => scrollTo(0,0,)} 
-          className='border border-zinc-500/30 pb-6 overflow-hidden rounded-lg inline-block hover:scale-103 duration-300'>
+          className='border border-zinc-500/30 pb-6 overflow-hidden rounded-lg inline-block hover:scale-103 duration-300 h-full'>
       <img className='w-full' src={course.courseThumbnail} alt='' />
       
       <div className='p-3 text-left'>
@@ -28,7 +28,15 @@ const CourseCard = ({course}) => {
           </p>
         </div>
 
-        <p className='text-base font-semibold text-zinc-800'>{currency}{(course.coursePrice - course.discount * course.coursePrice / 100).toFixed(2)}</p>
+        <p className='text-base font-semibold text-zinc-800'>{currency}
+          {(
+            course.coursePrice - 
+            (course.discount * course.coursePrice) / 100
+          ).toLocaleString(undefined, { 
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2 
+          })}
+        </p>
       </div>
     </Link>
   )

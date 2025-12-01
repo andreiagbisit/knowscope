@@ -68,8 +68,11 @@ const MyCourses = () => {
                     </td>
 
                     <td className='px-4 py-3'>
-                      {currency}{Math.floor(course.enrolledStudents.length * 
-                      (course.coursePrice - (course.discount * course.coursePrice) / 100)).toLocaleString()}
+                      {currency}{(course.enrolledStudents.length * 
+                      (course.coursePrice - (course.discount * course.coursePrice) / 100)).toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                      })}
                     </td>
 
                     <td className='px-4 py-3'>

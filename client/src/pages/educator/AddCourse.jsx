@@ -19,6 +19,8 @@ const AddCourse = () => {
   const [image, setImage] = useState(null)
   const [chapters, setChapters] = useState([])
   const [showPopup, setShowPopup] = useState(false)
+  const [showChapterModal, setShowChapterModal] = useState(false)
+  const [chapterTitleInput, setChapterTitleInput] = useState('')
   const [currentChapterId, setCurrentChapterId] = useState(null)
 
   const [lectureDetails, setLectureDetails] = useState(
@@ -32,18 +34,9 @@ const AddCourse = () => {
 
   const handleChapter = (action, chapterId) => {
     if (action === 'add') {
-      const title = prompt('Enter chapter name:')
-      if (title) {
-        const newChapter = {
-          chapterId: uniqid(),
-          chapterTitle: title,
-          chapterContent: [],
-          collapsed: false,
-          chapterOrder: chapters.length > 0 ? chapters.slice(-1)[0].chapterOrder + 1 : 1,
-        }
+      setShowChapterModal(true)
+      return
 
-        setChapters([...chapters, newChapter])
-      }
     } else if (action === 'remove') {
       setChapters(chapters.filter((chapter) => chapter.chapterId !== chapterId))
     
@@ -54,6 +47,22 @@ const AddCourse = () => {
         )
       )
     }
+  }
+
+  const addChapter = () => {
+    if (!chapterTitleInput.trim()) return
+
+    const newChapter = {
+      chapterId: uniqid(),
+      chapterTitle: chapterTitleInput.trim(),
+      chapterContent: [],
+      collapsed: false,
+      chapterOrder: chapters.length > 0 ? chapters.slice(-1)[0].chapterOrder + 1 : 1,
+    }
+
+    setChapters([...chapters, newChapter])
+    setChapterTitleInput('')
+    setShowChapterModal(false)
   }
 
   const handleLecture = (action, chapterId, lectureIndex) => {
@@ -103,10 +112,6 @@ const AddCourse = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault()
-      
-      if(!image) {
-        toast.error('Thumbnail not selected.')
-      }
 
       const courseData = {
         courseTitle,
@@ -249,7 +254,7 @@ const AddCourse = () => {
                        src={assets.dropdown_icon} 
                        width={14} 
                        alt=''
-                       className={`mr-2 cursor-pointer transition-all 
+                       className={`mr-3 cursor-pointer transition-all 
                                  ${chapter.collapsed && '-rotate-90'}`} />
 
                   <span className='font-base'>
@@ -264,7 +269,7 @@ const AddCourse = () => {
                 <img onClick={() => handleChapter('remove', chapter.chapterId)}
                      src={assets.cross_icon} 
                      alt='' 
-                     className='cursor-pointer' />
+                     className='cursor-pointer ml-1' />
               </div>
 
               {!chapter.collapsed && (
@@ -286,7 +291,7 @@ const AddCourse = () => {
                       <img src={assets.cross_icon} 
                            alt='' 
                            onClick={() => handleLecture('remove', chapter.chapterId, lectureIndex)}
-                           className='cursor-pointer' />
+                           className='cursor-pointer ml-2' />
                     </div>
                   ))}
 
@@ -303,6 +308,39 @@ const AddCourse = () => {
                onClick={() => handleChapter('add')}>
             Add Chapter
           </div>
+
+          {showChapterModal && (
+            <div className='fixed inset-0 flex items-center justify-center bg-zinc-800/50'>
+              <div className='bg-white text-zinc-700 p-4 rounded-md relative w-full max-w-80'>
+                <h2 className='text-lg font-semibold mb-4'>
+                  Add Chapter
+                </h2>
+
+                <div className='mb-2'>
+                  <p className='font-medium'>
+                    Chapter Title
+                  </p>
+
+                  <input type='text'
+                         className='mt-1 mb-3 block w-full border border-zinc-300 rounded-md py-1 px-2'
+                         value={chapterTitleInput}
+                         onChange={(e) => setChapterTitleInput(e.target.value)} />
+                </div>
+
+                <button type='button'
+                        className='button-custom w-full px-4 py-2 rounded-md'
+                        onClick={addChapter}>
+                  Add Chapter
+                </button>
+
+                <img onClick={() => setShowChapterModal(false)}
+                     src={assets.cross_icon}
+                     className='absolute top-4 right-4 w-4 cursor-pointer'
+                     alt=''
+                />
+              </div>
+            </div>
+          )}
 
           {showPopup && (
             <div className='fixed inset-0 flex items-center justify-center bg-zinc-800/50'>
@@ -334,7 +372,7 @@ const AddCourse = () => {
                 </div>
 
                 <div className='mb-2'>
-                  <p className='font-medium'>Lecture URL</p>
+                  <p className='font-medium'>Embedded Video URL (YouTube)</p>
 
                   <input type='text'
                          className='mt-1 block w-full border border-zinc-300 rounded-md py-1 px-2'

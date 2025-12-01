@@ -11,6 +11,7 @@ const Loading = () => {
   const isDashboardPage = location.pathname.includes('/educator')
   const isMyCoursesPage = location.pathname.includes('/educator/my-courses')
   const isStudentsEnrolledPage = location.pathname.includes('/educator/students-enrolled')
+  const isMyEnrollmentsPage = location.pathname.includes('/my-enrollments')
   
   const { path } = useParams()
 
@@ -26,7 +27,7 @@ const Loading = () => {
   
   return (
     <div className={`flex items-center justify-center
-      ${( isCourseDetailsPage || isPlayerPage || isDashboardPage || isMyCoursesPage || isStudentsEnrolledPage ) 
+      ${( isCourseDetailsPage || isPlayerPage || isDashboardPage || isMyCoursesPage || isStudentsEnrolledPage || isMyEnrollmentsPage ) 
                         ? 'min-h-screen' 
                         : ''
       }`}>

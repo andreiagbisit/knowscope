@@ -10,6 +10,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import SliceDesc from '../../components/student/SliceDesc'
 import pageTitle from '../../lib/pageTitle'
+import extractYoutubeId from '../../lib/extractYoutubeId'
 
 const CourseDetails = () => {
   const {id} = useParams()
@@ -90,7 +91,7 @@ const CourseDetails = () => {
 
   return courseData ? (
     <>
-      <div className='flex lg:flex-row flex-col-reverse gap-10 relative items-start justify-between lg:px-20 xl:px-36 px-8 md:pt-20 pt-10 text-left isolate'>
+      <div className='flex xl:flex-row flex-col-reverse gap-10 relative items-start justify-between lg:px-20 xl:px-36 px-8 md:pt-20 pt-10 text-left isolate'>
         <div className='absolute top-0 left-0 w-full h-section-height -z-1 bg-linear-to-b from-teal-100/70'></div>
 
         {/* LEFT COLUMN */}
@@ -115,11 +116,11 @@ const CourseDetails = () => {
             </div>
 
             <p className='text-green-600 font-semibold'>
-              ({courseData.courseRatings.length} {courseData.courseRatings.length > 1 ? 'ratings' : 'rating'})
+              ({courseData.courseRatings.length} {courseData.courseRatings.length === 1 ? 'rating' : 'ratings'})
             </p>
 
             <p>
-              {courseData.enrolledStudents.length} {courseData.enrolledStudents.length > 1 ? 'students' : 'student'}
+              {courseData.enrolledStudents.length} {courseData.enrolledStudents.length === 1 ? 'student' : 'students'}
             </p>
           </div>
 
@@ -140,18 +141,18 @@ const CourseDetails = () => {
                   <div className='flex items-center justify-between px-4 py-3 cursor-pointer select-none' 
                        onClick={() => toggleSection(index)}>
                     
-                    <div className='flex items-center gap-2'>
-                      <img className={`transform transition-transform ${openSections [index] ? 'rotate-180' : ''}`} 
+                    <div className='flex items-center gap-2 xl:w-full w-90'>
+                      <img className={`transform transition-transform mr-2 ${openSections [index] ? 'rotate-180' : ''}`} 
                            src={assets.down_arrow_icon} alt='arrow icon' />
                       
                       <p className='font-semibold md:text-base text-sm mr-2'>
-                        <span className='mr-1 '>
+                        <span className='mr-1'>
                           {chapter.chapterTitle}
                         </span>
                       </p>
                     </div>
 
-                    <p className='text-sm md:text-default'>
+                    <p className='text-sm md:text-default justify-end w-60'>
                       {chapter.chapterContent.length} {chapter.chapterContent.length === 1 ? 'lecture' : 'lectures'} - {calculateChapterTime(chapter)}
                     </p>
                   </div>
@@ -165,16 +166,17 @@ const CourseDetails = () => {
                           
                           <img src={assets.play_icon} 
                                alt='play icon' 
-                                className='w-4 h-4 mt-0.5' />
+                                className='h-4 mt-0.5' />
 
                           <div className='flex items-center justify-between w-full text-zinc-800 text-xs md:text-default'>
-                            <p>{lecture.lectureTitle}</p>
+                            <p className='w-80'>{lecture.lectureTitle}</p>
 
                             <div className='flex gap-2'>
                                 {lecture.isPreviewFree && 
                                   <p onClick={() => setPlayerData({
-                                     videoId: lecture.lectureUrl.split('/').pop()
-                                  })} className='link-custom-2 font-semibold'>
+                                              videoId: extractYoutubeId(lecture.lectureUrl)
+                                             })} 
+                                     className='link-custom-2 font-semibold'>
                                     Preview
                                   </p>
                                 }
@@ -209,8 +211,8 @@ const CourseDetails = () => {
           {
             playerData ?
               <YouTube videoId={playerData.videoId} 
-                        opts={{playerVars: { autoplay: 1 }}} 
-                        iframeClassName='w-full aspect-video' />
+                       opts={{playerVars: { autoplay: 1 }}} 
+                       iframeClassName='w-full aspect-video' />
 
             : <img src={courseData.courseThumbnail} alt='' />
           }
@@ -218,11 +220,12 @@ const CourseDetails = () => {
           <div className='p-5'>
             <div className='flex gap-3 items-center pt-2'>
               <p className='text-zinc-800 md:text-4xl text-2xl font-semibold'>
-                {currency}{(courseData.coursePrice - courseData.discount * courseData.coursePrice / 100).toFixed(2)}
+                {currency}{(courseData.coursePrice - (courseData.discount * courseData.coursePrice) / 100)
+                .toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
 
               <p className='md:text-lg text-zinc-600 line-through'>
-                {currency}{courseData.coursePrice}
+                {currency}{courseData.coursePrice.toLocaleString()}
               </p>
 
               <p className='md:text-lg font-medium text-yellow-500'>

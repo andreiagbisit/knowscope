@@ -10,6 +10,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import Loading from '../../components/student/Loading'
 import pageTitle from '../../lib/pageTitle'
+import extractYoutubeId from '../../lib/extractYoutubeId'
 
 const Player = () => {
   
@@ -125,7 +126,7 @@ const Player = () => {
   return courseData ?  (
     <div className='min-h-screen flex flex-col'>
       <div className='flex-1'>
-        <div className='p-4 sm:p-10 flex flex-col-reverse lg:grid md:grid-cols-2 gap-10 md:px-36'>
+        <div className='p-4 sm:p-10 flex flex-col-reverse xl:grid md:grid-cols-2 gap-10 lg:px-36 md:px-15'>
             {/* LEFT COLUMN */}
             <div className='text-zinc-800'>
               {courseData && (
@@ -173,7 +174,7 @@ const Player = () => {
                                 className='w-4 h-4 mt-0.5' />
 
                             <div className='flex items-center justify-between w-full text-zinc-800 text-xs md:text-default'>
-                              <p>{lecture.lectureTitle}</p>
+                              <p className='w-90'>{lecture.lectureTitle}</p>
 
                               <div className='flex gap-2'>
                                   {lecture.lectureUrl && 
@@ -212,16 +213,21 @@ const Player = () => {
             <div className='md:mt-10'>
               {playerData ? (
                 <div>
-                  <YouTube videoId={playerData.lectureUrl.split('/').pop()} 
-                          iframeClassName='w-full aspect-video' />
+                  <YouTube videoId={extractYoutubeId(playerData.lectureUrl)} 
+                           iframeClassName='w-full aspect-video' />
 
-                  <div className='flex justify-between items-center mt-3'>
-                    <p>
+                  <div className='flex justify-between mt-3'>
+                    <p className='w-90'>
                       {playerData.chapter}.{playerData.lecture} - <span className='font-medium'>{playerData.lectureTitle}</span>
                     </p>
 
                     <button onClick={() => markLectureAsCompleted(playerData.lectureId)} 
-                            className='link-custom-2 font-semibold'>
+                            className={`link-custom-2 font-semibold ${
+                                        progressData && progressData.lectureCompleted.includes(playerData.lectureId)
+                                          ? 'text-green-600 hover:text-green-500'
+                                          : 'text-amber-500 hover:text-amber-400'
+                                      }`}>
+
                       {progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? 'Completed' : 'Mark as Complete'}
                     </button>
                   </div>

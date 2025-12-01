@@ -82,7 +82,10 @@ const Dashboard = () => {
 
             <div>
               <p className='text-2xl font-bold text-green-600'>
-                {currency}{dashboardData.totalEarnings.toLocaleString()}
+                {currency}{dashboardData.totalEarnings.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
               </p>
 
               <p className='text-md text-zinc-600'>

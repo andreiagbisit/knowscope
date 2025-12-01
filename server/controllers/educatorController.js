@@ -42,8 +42,17 @@ export const addCourse = async (req, res) => {
         res.json({ success: true, message: 'Course added.' })
 
     } catch (error) {
+        if (error.name === 'ValidationError') {
+            if (error.message.includes('lectureUrl')) {
+                return res.json({ success: false, message: 'YouTube URL not added.' })
+            }
+            
+            return res.json({ success: false, message: 'Please fill out all required fields.' })
+        }
+
         res.json({ success: false, message: error.message })
-    }
+}
+
 }
 
 // GET EDUCATOR COURSES
