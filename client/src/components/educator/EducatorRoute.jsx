@@ -6,11 +6,17 @@ export default function EducatorRoute({ children }) {
   const { isLoaded, isSignedIn, user } = useUser()
   const location = useLocation()
 
-  if (!isLoaded) return <Loading />
-
   const isEducatorPath = location.pathname.startsWith('/educator')
 
-  // Not signed in → bounce OUT of educator area
+  // 1. Never redirect while Clerk is still loading
+  if (!isLoaded) return <Loading />
+
+  // 2. If Clerk is loaded but user is STILL signing in (first-time), render nothing yet
+  if (isLoaded && !isSignedIn && location.pathname.startsWith('/sign-in')) {
+    return null
+  }
+
+  // 3. Not signed in - bounce safely
   if (!isSignedIn) {
     return (
       <Navigate
@@ -20,8 +26,13 @@ export default function EducatorRoute({ children }) {
     )
   }
 
-  // Signed in but not educator → bounce OUT
-  if (user?.publicMetadata?.role !== 'educator') {
+  // 4. Wait until Clerk has loaded user metadata before checking role
+  if (!user || user.publicMetadata === undefined) {
+    return <Loading />
+  }
+
+  // 5. Signed in but not educator - bounce safely
+  if (user.publicMetadata.role !== 'educator') {
     return (
       <Navigate
         to={isEducatorPath ? '/' : location.pathname}
@@ -30,5 +41,6 @@ export default function EducatorRoute({ children }) {
     )
   }
 
+  // 6. Finally render child routes
   return children
 }
