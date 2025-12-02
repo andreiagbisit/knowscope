@@ -17,13 +17,15 @@ import { ToastContainer } from 'react-toastify'
 import { useUser } from '@clerk/clerk-react'
 import EducatorGate from './components/educator/EducatorGate'
 import ProtectedRoute from './components/student/ProtectedRoute'
+import { useAppContext } from './context/AppContext'
 
 const App = () => {
   
   const isEducatorRoute = useMatch('/educator/*')
-  const { isSignedIn } = useUser()
+  const { user, isLoading } = useAppContext
+  if (isLoading) return <Loading />
   const location = useLocation()
-  const hideNavbar = (!isSignedIn && location.pathname === '/my-enrollments')
+  const hideNavbar = (!user && location.pathname === '/my-enrollments')
   
   return (
     <div className='text-default min-h-screen bg-white'>
