@@ -63,6 +63,13 @@
     <th><b>Name</b></th>
     <th><b>Details</b></th>
   </tr>
+
+  <tr>
+    <td>
+      <b>Vite 7.2.4</b>
+    </td>
+    <td>Development environment</td>
+  </tr>
   
   <tr>
     <td>
