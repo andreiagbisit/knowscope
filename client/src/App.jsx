@@ -17,6 +17,7 @@ import { ToastContainer } from 'react-toastify'
 import { useUser } from '@clerk/clerk-react'
 import EducatorGate from './components/educator/EducatorGate'
 import ProtectedRoute from './components/student/ProtectedRoute'
+import Educator from './pages/educator/Educator'
 
 const App = () => {
   
@@ -44,7 +45,7 @@ const App = () => {
           </ProtectedRoute>
         } />
         
-        <Route path='/educator' element={<EducatorGate />}>
+        <Route path='/educator' element={<Educator />}>
           <Route path='/educator' element={<Dashboard />} />
           <Route path='add-course' element={<AddCourse />} />
           <Route path='my-courses' element={<MyCourses />} />
