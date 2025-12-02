@@ -8,12 +8,26 @@ export default function EducatorRoute({ children }) {
 
   if (!isLoaded) return <Loading />
 
+  const isEducatorPath = location.pathname.startsWith('/educator')
+
+  // Not signed in → bounce OUT of educator area
   if (!isSignedIn) {
-    return <Navigate to={location.pathname} replace />
+    return (
+      <Navigate
+        to={isEducatorPath ? '/' : location.pathname}
+        replace
+      />
+    )
   }
 
+  // Signed in but not educator → bounce OUT
   if (user?.publicMetadata?.role !== 'educator') {
-    return <Navigate to={location.pathname} replace />
+    return (
+      <Navigate
+        to={isEducatorPath ? '/' : location.pathname}
+        replace
+      />
+    )
   }
 
   return children
