@@ -326,6 +326,53 @@ STRIPE_PUBLISHABLE_KEY=[publishable key]
 STRIPE_SECRET_KEY=[secret key]
 STRIPE_WEBHOOK_SECRET=[webhook secret]</code></pre>
 
+<h3>Deployment</h3>
+
+<ul>
+  <li>
+    <code>vercel.json</code> <b>configuration</b><br>
+    Create two files named <code>vercel.json</code> then copy and paste the following code. Afterwards, place the files in the root of the folders <code>client</code> and <code>server</code>, according to their code content.
+  </li>
+</ul>
+
+<ul>
+  <li><code>vercel.json</code> - <b>client-side</b></li>
+</ul>
+
+<pre><code>  {
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/"
+      }
+    ]
+  }</code></pre>
+
+<ul>
+  <li><code>vercel.json</code> - <b>server-side</b></li>
+</ul>
+
+<pre><code>{
+    "version": 2,
+    "builds": [
+        {
+            "src": "server.js",
+            "use": "@vercel/node",
+            "config": {
+                "includeFiles": [
+                    "dist/**"
+                ]
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "server.js"
+        }
+    ]
+}</code></pre>
+
 <hr>
 
 <h2>Clerk - set user as Educator</h2>
