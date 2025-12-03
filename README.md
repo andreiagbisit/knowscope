@@ -166,7 +166,7 @@
 
 <hr>
 
-<h2>Installation</h2>
+<h2>Setup</h2>
 
 <h3>Prerequisites</h3>
 <ul>
