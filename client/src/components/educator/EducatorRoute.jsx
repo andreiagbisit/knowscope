@@ -5,8 +5,9 @@ import Loading from '../student/Loading'
 function EducatorRoute ({ children }) {
   const location = useLocation()
   const isEducatorPath = location.pathname.startsWith('/educator')
-  const { isLoading, isSignedIn, user } = useUser()
+  const { isLoaded, isLoading, user, isSignedIn } = useUser()
 
+  if (!isLoaded) return <Loading />
   if (isLoading) return <Loading />
 
   if (!user || user.publicMetadata === undefined) {
