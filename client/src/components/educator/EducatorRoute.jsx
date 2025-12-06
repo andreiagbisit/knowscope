@@ -7,10 +7,7 @@ function EducatorRoute ({ children }) {
   const isEducatorPath = location.pathname.startsWith('/educator')
   const { isLoaded, isLoading, user, isSignedIn } = useUser()
 
-  if (!isLoaded) return <Loading />
-  if (isLoading) return <Loading />
-
-  if (!user || user.publicMetadata === undefined) {
+  if (!isLoaded || isLoading || !user || user.publicMetadata === undefined) {  
     return <Loading />
   }
 
