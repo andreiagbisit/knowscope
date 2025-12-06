@@ -10,10 +10,6 @@ function EducatorRoute ({ children }) {
 
   if (!isLoaded) return <Loading />
 
-  if (isLoaded && !isSignedIn && location.pathname.startsWith('/sign-in')) {
-    return null
-  }
-
   if (!isSignedIn) {
     return (
       <Navigate to={isEducatorPath ? '/' : location.pathname} replace />
